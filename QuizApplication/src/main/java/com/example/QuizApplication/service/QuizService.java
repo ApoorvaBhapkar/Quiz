@@ -25,12 +25,17 @@ public class QuizService {
     QuestionDao questionDao;
 
     public ResponseEntity<Quiz> createQuiz(String category, int numQ, String title) {
-        Quiz quiz=new Quiz();
-        List<Question> questions=questionDao.findRandomQuestionsByCategory(category,numQ); 
-        quiz.setTitle(title);
-        quiz.setQuestions(questions);
-        quizDao.save(quiz);
-        return new ResponseEntity<>(quiz,HttpStatus.OK);
+        try {
+            Quiz quiz=new Quiz();
+            List<Question> questions=questionDao.findRandomQuestionsByCategory(category,numQ); 
+            quiz.setTitle(title);
+            quiz.setQuestions(questions);
+            quizDao.save(quiz);
+            return new ResponseEntity<>(quiz,HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>(new Quiz(),HttpStatus.BAD_REQUEST);
     }
 
     public ResponseEntity<List<QuestionWrapper>> getQuiz(Integer id) {
